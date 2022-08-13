@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_book_app/models/basic_basic_model.dart';
@@ -8,7 +9,9 @@ import 'package:flutter_book_app/views/home%20view/components/popular_container.
 import 'package:flutter_book_app/views/home%20view/components/popular_tab_container.dart';
 import 'package:flutter_book_app/views/Read%20view/read_view.dart';
 import 'package:flutter_book_app/core/services/book_services.dart';
+import 'package:flutter_book_app/views/home%20view/components/skeleton.dart';
 import 'package:flutter_book_app/views/search%20result%20view/search_result_view.dart';
+//import 'package:flutter_book_app/widgets/skeleton.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -39,6 +42,8 @@ class _HomeViewState extends State<HomeView> {
   //   'assets/pj5.jpg',
   //   'assets/pj6.jpg',
   // ];
+  var random = Random();
+  late int randomNumber = random.nextInt(popularDataList.length);
   int selectIndex = 0;
   BookServices _bookServices = BookServices();
   List<BasicBookModel> genreDataList = [];
@@ -81,7 +86,7 @@ class _HomeViewState extends State<HomeView> {
       effect: const ScrollingDotsEffect(
         dotHeight: 10,
         dotWidth: 10,
-        activeDotColor: Colors.cyan,
+        activeDotColor: Colors.grey,
         dotColor: Colors.white,
       ),
     );
@@ -121,103 +126,113 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      body: popularDataList.isEmpty || genreDataList.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                    child: Container(
-                  //height: 270,
-                  constraints: const BoxConstraints(maxHeight: 320),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(18),
-                        bottomRight: Radius.circular(18)),
-                    color: Colors.black,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 8,
+      body:
+          //  popularDataList.isEmpty || genreDataList.isEmpty
+          //     ? const Center(
+          //         child: CircularProgressIndicator(),
+          //       )
+          //     :
+          CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+              child: Container(
+            //height: 270,
+            constraints: const BoxConstraints(maxHeight: 320),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(18),
+                  bottomRight: Radius.circular(18)),
+              color: Colors.black,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 2, 20, 2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: Colors.white,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(20, 2, 20, 2),
-                            decoration: BoxDecoration(
+                      width: MediaQuery.of(context).size.width - 88,
+                      height: 40,
+                      child: TextFormField(
+                        controller: _controller,
+                        onFieldSubmitted: (value) {
+                          value = _controller.text;
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchResultView(
+                                        val: value,
+                                      )));
+                        },
+                        style: const TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: 'Search',
+                            hintMaxLines: 1,
+                            hintStyle: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
+                            //disabledBorder: InputBorder.none,
+                            enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18),
-                              color: Colors.white,
-                            ),
-                            width: MediaQuery.of(context).size.width - 88,
-                            height: 40,
-                            child: TextFormField(
-                              controller: _controller,
-                              onFieldSubmitted: (value) {
-                                value = _controller.text;
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SearchResultView(
-                                              val: value,
-                                            )));
-                              },
-                              style: const TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.search),
-                                  hintText: 'Search',
-                                  hintMaxLines: 1,
-                                  hintStyle: const TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                  //disabledBorder: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                    borderSide: const BorderSide(
-                                      color: Colors.white,
-                                      width: 1,
-                                      //style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: const BorderSide(
-                                        color: Colors.white,
-                                        width: 1,
-                                      ))),
-                            ),
-                          ),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => BookmarkView()));
-                              },
-                              icon: Icon(
-                                Icons.bookmark,
+                              borderSide: const BorderSide(
                                 color: Colors.white,
-                              ))
-                        ],
+                                width: 1,
+                                //style: BorderStyle.solid,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(18),
+                                borderSide: const BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                ))),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text('Recommended',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20)),
-                      ),
-                      Column(
+                    ),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BookmarkView()));
+                        },
+                        icon: Icon(
+                          Icons.bookmark,
+                          color: Colors.white,
+                        ))
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  child: Text('Recommended',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20)),
+                ),
+                popularDataList.isEmpty || genreDataList.isEmpty
+                    ? const SizedBox(
+                        height: 220,
+                        width: double.infinity,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Column(
                         children: [
                           CarouselSlider.builder(
                             itemCount: popularDataList.length,
                             options: CarouselOptions(
                               height: 220,
-                              enableInfiniteScroll: false,
+                              enableInfiniteScroll: true,
                               pageSnapping: false,
                               autoPlay: true,
                               reverse: false,
@@ -239,13 +254,17 @@ class _HomeViewState extends State<HomeView> {
                           buildIndicator(),
                         ],
                       )
-                    ],
-                  ),
-                )),
-                const SliverPinnedHeader(
-                  child: PopularTabContainer(),
-                ),
-                SliverToBoxAdapter(
+              ],
+            ),
+          )),
+          const SliverPinnedHeader(
+            child: PopularTabContainer(),
+          ),
+          popularDataList.isEmpty
+              ? SliverToBoxAdapter(
+                  child: Skeleton(),
+                )
+              : SliverToBoxAdapter(
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -272,32 +291,35 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       )),
                 ),
-                SliverPinnedHeader(
-                    child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: [
-                    ...List.generate(
-                      genreCategories.length,
-                      (index) => GestureDetector(
-                        onTap: (() {
-                          genreDataList = [];
-                          setState(() {});
-                          selectIndex = index;
-                          getGenreData(genreCategories[selectIndex]);
-                        }),
-                        child: GenreCategoriesContainer(
-                            text: genreCategories[index],
-                            color: selectIndex == index
-                                ? Colors.black
-                                : Colors.transparent,
-                            textColor: selectIndex == index
-                                ? Colors.white
-                                : Colors.black),
-                      ),
-                    )
-                  ]),
-                )),
-                SliverToBoxAdapter(
+          SliverPinnedHeader(
+              child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(children: [
+              ...List.generate(
+                genreCategories.length,
+                (index) => GestureDetector(
+                  onTap: (() {
+                    genreDataList = [];
+                    setState(() {});
+                    selectIndex = index;
+                    getGenreData(genreCategories[selectIndex]);
+                  }),
+                  child: GenreCategoriesContainer(
+                      text: genreCategories[index],
+                      color: selectIndex == index
+                          ? Colors.black
+                          : Colors.transparent,
+                      textColor:
+                          selectIndex == index ? Colors.white : Colors.black),
+                ),
+              )
+            ]),
+          )),
+          genreDataList.isEmpty
+              ? SliverToBoxAdapter(
+                  child: Skeleton(),
+                )
+              : SliverToBoxAdapter(
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -323,8 +345,8 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       )),
                 ),
-              ],
-            ),
+        ],
+      ),
     ));
   }
 }

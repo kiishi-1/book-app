@@ -91,13 +91,13 @@ class _ReadViewState extends State<ReadView> {
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
                               ),
                               const SizedBox(
-                                height: 4,
+                                height: 7,
                               ),
                               ...List.generate(
                                 bookIdData!.authors.length,
@@ -108,7 +108,7 @@ class _ReadViewState extends State<ReadView> {
                                         color: Colors.white)),
                               ),
                               const SizedBox(
-                                height: 4,
+                                height: 7,
                               ),
                               Text(bookIdData!.published_date,
                                   style: const TextStyle(
@@ -116,7 +116,7 @@ class _ReadViewState extends State<ReadView> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white)),
                               const SizedBox(
-                                height: 4,
+                                height: 7,
                               ),
                               Row(
                                 children: [

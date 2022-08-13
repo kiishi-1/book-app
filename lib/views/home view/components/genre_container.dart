@@ -10,7 +10,7 @@ class GenreContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.all(12),
-        constraints: BoxConstraints(maxHeight: 235, maxWidth: 150),
+        constraints: BoxConstraints(maxHeight: 260, maxWidth: 150),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             height: 165,
@@ -34,6 +34,8 @@ class GenreContainer extends StatelessWidget {
               children: [
                 Text(
                   name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
